@@ -29,6 +29,14 @@
 			component = { ...component };
 		}
 	}
+
+	function calculateCompletion() {
+		const totalNeeded = project.components.reduce((sum, c) => sum + c.needed, 0);
+		const totalAvailable = project.components.reduce((sum, c) => sum + c.available, 0);
+		return Math.round((totalAvailable / totalNeeded) * 100);
+	}
+
+	let completionPercentage = calculateCompletion();
 </script>
 
 <div class="flex flex-col items-center gap-6">
@@ -45,20 +53,34 @@
 		<h2 class="text-xl md:text-2xl font-semibold">{project.name}</h2>
 		<p class="max-w-full md:max-w-72 text-sm md:text-base">{project.description}</p>
 	</div>
+	<div class="w-full bg-gray-200 dark:bg-zinc-800 rounded-full h-4 mt-4">
+		<div class="bg-green-500 h-4 rounded-full" style="width: {completionPercentage}%"></div>
+	</div>
+	<p class="text-sm mt-2">Project Completion: {completionPercentage}%</p>
 	<h2 class="text-xl md:text-2xl font-semibold">Components Needed</h2>
 	<div class="flex flex-col md:flex-row w-full gap-4">
 		{#each project.components as component, index (index)}
 			<div
 				class="flex flex-col justify-center items-center gap-4 p-4 flex-1"
-				style="border-right: {index !== project.components.length - 1 && typeof window !== 'undefined' && window.innerWidth >= 768
-					? '1px solid rgba(0, 0, 0, 0.1)'
+				style="border-right: {index !== project.components.length - 1 &&
+				typeof window !== 'undefined' &&
+				window.innerWidth >= 768
+					? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+						? '1px solid rgba(255, 255, 255, 0.1)'
+						: '1px solid rgba(0, 0, 0, 0.1)'
 					: 'none'};"
 			>
-				<img src={component.image} alt={component.name} class="size-12 md:size-16" />
+				<img
+					src={component.image}
+					alt={component.name}
+					class="size-12 md:size-16 unique-class-{index}"
+				/>
 				<div class="flex-1 text-center">
 					<h2 class="text-lg md:text-xl font-semibold">{component.name}</h2>
 					<p class="text-xs md:text-sm font-bold">
-						{component.available}/<span class="text-[8px] md:text-[10px] opacity-60">{component.needed}</span>
+						{component.available}/<span class="text-[8px] md:text-[10px] opacity-60"
+							>{component.needed}</span
+						>
 					</p>
 				</div>
 				<!-- Counter -->
@@ -82,5 +104,9 @@
 			</div>
 		{/each}
 	</div>
-	<a href="/donate" class="py-2 px-4 bg-black dark:bg-white text-white dark:text-black rounded-lg text-sm md:text-base">Continue -></a>
+	<a
+		href="/donate"
+		class="py-2 px-4 bg-black dark:bg-white text-white dark:text-black rounded-lg text-sm md:text-base"
+		>Continue -></a
+	>
 </div>
