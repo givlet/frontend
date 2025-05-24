@@ -1,17 +1,14 @@
 <script lang="ts">
 	import ForestCanvas from '$lib/3d/ForestCanvas.svelte';
-	import SchoolCanvas from '$lib/3d/SchoolCanvas.svelte';
 
 	export let projectName: string | null = null; // Allow projectName to be null
 	export let onClose: () => void;
 
-	let CanvasComponent: typeof ForestCanvas | typeof SchoolCanvas | null = null;
+	let CanvasComponent: typeof ForestCanvas | null = null;
 
 	// Ensure projectName is a valid string before calling .toLowerCase()
 	if (projectName && projectName.toLowerCase().includes('trees')) {
 		CanvasComponent = ForestCanvas;
-	} else if (projectName && projectName.toLowerCase().includes('school')) {
-		CanvasComponent = SchoolCanvas;
 	} else {
 		CanvasComponent = null;
 	}
@@ -40,3 +37,4 @@
 		</div>
 	</div>
 </div>
+>
