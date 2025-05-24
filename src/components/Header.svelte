@@ -1,17 +1,45 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import { generateRandomUser, getUserFromCookie, saveUserToCookie } from '$lib/user';
 
-	let user;
+	let user: { name: string; streak: number; profilePicture: string; lastLogin: string } | null = null;
 
 	onMount(() => {
-		// Check if user exists in cookies
-		user = getUserFromCookie();
+		const cookieString = document.cookie;
 
-		// If no user exists, generate a new one and save it
-		if (!user) {
+		// Fetch user from cookies
+		const cookieUser = getUserFromCookie(cookieString);
+
+		if (
+			cookieUser &&
+			typeof cookieUser === 'object' &&
+			'name' in cookieUser &&
+			'streak' in cookieUser &&
+			'profilePicture' in cookieUser &&
+			'lastLogin' in cookieUser &&
+			typeof cookieUser.name === 'string' &&
+			typeof cookieUser.streak === 'number' &&
+			typeof cookieUser.profilePicture === 'string' &&
+			typeof cookieUser.lastLogin === 'string'
+		) {
+			user = cookieUser as { name: string; streak: number; profilePicture: string; lastLogin: string };
+
+			// Check if the user logged in on a new day
+			const today = new Date().toISOString().split('T')[0];
+			if (user.lastLogin !== today) {
+				user.streak += 1; // Increment streak
+				user.lastLogin = today; // Update last login date
+				saveUserToCookie(user, (cookie) => {
+					document.cookie = cookie;
+				});
+			}
+		} else {
+			// Generate a new user if no valid user exists in cookies
 			user = generateRandomUser();
-			saveUserToCookie(user);
+			user.lastLogin = new Date().toISOString().split('T')[0]; // Set today's date as last login
+			saveUserToCookie(user, (cookie) => {
+				document.cookie = cookie;
+			});
 		}
 	});
 
