@@ -131,7 +131,7 @@
 <div class="flex flex-col items-center gap-6">
 	{#if currentProject && currentProject.components}
 		<div
-			class="flex flex-col justify-center gap-6 w-full text-white rounded-2xl px-6 py-16 md:px-18 md:py-32"
+			class="flex flex-row justify-between w-full text-white rounded-2xl px-6 py-16 md:px-18 md:py-32"
 			style="
 			background: linear-gradient(180deg, rgba(0, 0, 0, 0.40) 0%, rgba(0, 0, 0, 0.40) 100%), url({currentProject.image}) black 80% / cover no-repeat;
 			-webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 100%);
@@ -140,8 +140,17 @@
 			mask-size: cover;
 		"
 		>
-			<h2 class="text-xl md:text-2xl font-semibold">{currentProject.name}</h2>
-			<p class="max-w-full md:max-w-72 text-sm md:text-base">{currentProject.description}</p>
+			<div class="flex flex-col justify-center gap-6">
+				<h2 class="text-xl md:text-2xl font-semibold">{currentProject.name}</h2>
+				<p class="max-w-full md:max-w-72 text-sm md:text-base">{currentProject.description}</p>
+			</div>
+			<button
+				class="flex flex-col gap-2 py-6 font-bold px-9 h-max dark:bg-black bg-white dark:text-white text-black rounded-lg text-sm md:text-base hover:bg-white hover:text-black hover:border dark:hover:bg-black dark:hover:text-white transition"
+				on:click={togglePopup}
+			>
+				<span class="material-symbols-outlined"> view_in_ar </span>
+				See 3D Progress
+			</button>
 		</div>
 		<div class="w-full bg-gray-200 dark:bg-zinc-800 rounded-full h-4 mt-4">
 			<div class="bg-green-500 h-4 rounded-full" style="width: {completionPercentage}%"></div>
@@ -196,12 +205,12 @@
 		</div>
 		<button
 			class="py-2 px-4 bg-black dark:bg-white text-white dark:text-black rounded-lg text-sm md:text-base hover:bg-white hover:text-black hover:border dark:hover:bg-black dark:hover:text-white transition"
-			on:click={togglePopup}
+			on:click={applyChangesToProject}
 		>
-			Continue ->
+			Confirm Changes
 		</button>
 		{#if isPopupOpen && currentProject}
-			<Popup3D {currentProject} on:close={togglePopup} onContinue={applyChangesToProject} />
+			<Popup3D projectName={currentProject.name} onClose={togglePopup} />
 		{/if}
 
 		<h2 class="text-xl md:text-2xl font-semibold">Leaderboard</h2>
@@ -226,6 +235,36 @@
 				<p class="text-gray-500">No donations yet. Be the first to contribute!</p>
 			{/if}
 		</div>
+
+		<!-- Carbon Offset Calculator UI -->
+		{#if currentProject.name.toLowerCase().includes('trees')}
+			<div class="flex flex-col gap-2">
+				<h2 class="text-xl md:text-2xl font-semibold mt-6">Carbon Offset Calculator</h2>
+				<div class="flex flex-col items-center gap-4 w-full">
+					<div class="flex items-center gap-2">
+						<label for="numberOfTrees" class="text-sm md:text-base font-semibold"
+							>Number of Trees:</label
+						>
+						<input
+							id="numberOfTrees"
+							type="number"
+							class="py-1 px-2 md:py-1 md:px-3 bg-gray-100 dark:bg-zinc-800 text-black dark:text-white rounded-lg text-sm md:text-base"
+							bind:value={numberOfTrees}
+							min="0"
+						/>
+					</div>
+					<button
+						class="py-2 px-4 bg-green-500 text-white rounded-lg text-sm md:text-base hover:bg-green-600 transition"
+						on:click={calculateCarbonOffset}
+					>
+						Calculate Carbon Offset
+					</button>
+					<p class="text-sm md:text-base font-semibold">
+						Carbon Offset: {carbonOffset} kg CO<sub>2</sub>/year
+					</p>
+				</div>
+			</div>
+		{/if}
 	{:else}
 		<p class="text-red-500">Project not found or data is invalid.</p>
 	{/if}

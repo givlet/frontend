@@ -7,7 +7,7 @@ export const projects = [
       {
         "name": "Bricks",
         "needed": 10000,
-        "available": 5020,
+        "available": 5025,
         "price": 0.5,
         "image": "/icons/brick.png",
         "cartCount": 0
@@ -15,7 +15,7 @@ export const projects = [
       {
         "name": "Tables",
         "needed": 50,
-        "available": 35,
+        "available": 41,
         "price": 20,
         "image": "/icons/table.png",
         "cartCount": 0
@@ -23,7 +23,7 @@ export const projects = [
       {
         "name": "Chairs",
         "needed": 100,
-        "available": 80,
+        "available": 85,
         "price": 10,
         "image": "/icons/chair.png",
         "cartCount": 0
@@ -50,6 +50,11 @@ export const projects = [
         "name": "Clever Owl",
         "amount": 227.5,
         "profilePicture": "https://api.dicebear.com/6.x/identicon/svg?seed=7c693338-6881-4483-b520-0cf905fac989"
+      },
+      {
+        "name": "Playful Penguin",
+        "amount": 172.5,
+        "profilePicture": "https://api.dicebear.com/6.x/identicon/svg?seed=61221324-cf5f-4974-bfa4-3db91901d2ec"
       }
     ]
   },
@@ -61,11 +66,18 @@ export const projects = [
       {
         "name": "Trees",
         "needed": 10,
-        "available": 2,
+        "available": 10,
         "price": 15,
-        "image": "/icons/tree.png"
+        "image": "/icons/tree.png",
+        "cartCount": 0
       }
     ],
-    "leaderboard": []
+    "leaderboard": [
+      {
+        "name": "Playful Penguin",
+        "amount": 120,
+        "profilePicture": "https://api.dicebear.com/6.x/identicon/svg?seed=61221324-cf5f-4974-bfa4-3db91901d2ec"
+      }
+    ]
   }
 ];
